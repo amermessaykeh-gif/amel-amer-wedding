@@ -8,8 +8,9 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 ROOT = Path(__file__).resolve().parent.parent
 SHARE_IMAGE = "assets/wedding-share.jpg"
 URL_MARKER = "<!-- PUBLIC_URL_METADATA -->"
+NOJEKYLL = Path(".nojekyll")
 SITE_FILES = [
-    Path(".nojekyll"),
+    NOJEKYLL,
     Path("index.html"),
     Path("styles.css"),
     Path("invitation.js"),
@@ -49,7 +50,7 @@ def prepare(site_url, output):
     if output.exists() and (not output.is_dir() or any(output.iterdir())):
         raise ValueError("Use a new or empty output directory; existing files will not be overwritten.")
     for relative in SITE_FILES:
-        if not (ROOT / relative).is_file():
+        if relative != NOJEKYLL and not (ROOT / relative).is_file():
             raise FileNotFoundError(f"Missing required site file: {relative}")
 
     source = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -70,7 +71,10 @@ def prepare(site_url, output):
     for relative in SITE_FILES:
         destination = output / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
-        if relative == Path("index.html"):
+        if relative == NOJEKYLL:
+            # Browser uploads can omit empty dotfiles; this marker is generated output.
+            destination.write_bytes(b"")
+        elif relative == Path("index.html"):
             destination.write_text(source, encoding="utf-8")
         else:
             shutil.copy2(ROOT / relative, destination)
