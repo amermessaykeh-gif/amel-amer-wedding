@@ -51,18 +51,20 @@ Open `http://localhost:4173`. Python's basic server is sufficient for a preview 
 
 ## Deploy
 
-For a step-by-step GitHub Pages plan, see [GITHUB-PAGES.md](GITHUB-PAGES.md). The included `.nojekyll` marker allows direct static-file publishing from the repository root.
+For the updated GitHub Pages plan, see [GITHUB-PAGES.md](GITHUB-PAGES.md). Choose **GitHub Actions** as the Pages source, rather than the earlier branch-only setup. The included workflow reads the actual public URL and prepares crawler-readable sharing metadata automatically.
 
-Upload these files together to any HTTPS static host (for example, GitHub Pages, Netlify, or Cloudflare Pages):
+The published static site contains:
 
 - `index.html`, `styles.css`
 - `invitation.js`, `letter.js`, `music.js`
 - `calendar.js`, `wedding-config.js`
-- `assets/wedding-emblem.png`, `assets/wedding-song.mp3`
+- `assets/wedding-emblem.png`, `assets/wedding-song.mp3`, `assets/wedding-share.jpg`
 - `AMEL_&_AMER_WEDDING_V.01.mp4`
 - `.nojekyll` when deploying to GitHub Pages
 
-No package installation, build step, backend, cookies, analytics, or external fonts are required. The original SVG/WAV and the obsolete `favicon.svg` are not required for deployment.
+For GitHub Pages, also upload `.github/workflows/pages.yml` and `scripts/prepare_pages.py` from the final package. The workflow runs the small, standard-library Python preparation step for you; no packages, secrets, manual build commands, backend, cookies, analytics, or external fonts are needed.
+
+The original SVG/WAV, obsolete `favicon.svg`, and ZIP itself are not required for deployment. The workflow publishes only the explicit static-file list, not the repository's documentation, scripts, or archive.
 
 The host should:
 
@@ -70,9 +72,25 @@ The host should:
 - Support byte-range requests (`206 Partial Content`) for efficient media loading and replay.
 - Compress text assets and cache the media. Use versioned filenames if replacing media; avoid long-lived immutable caching for the editable event configuration.
 - The HTML and controller imports include a release query for the CSS/JavaScript. Bump this value when changing the page structure or controllers, so returning guests do not combine new markup with an older cached script.
-- Optionally add an absolute `og:url` and an absolute `og:image` URL for a hosted JPEG/PNG preview to the HTML once the public domain is known. The page already includes share title and description metadata.
+- Publish the prepared HTML so its canonical, Open Graph, and Twitter image URLs point to the actual HTTPS website. The GitHub Pages workflow supplies these automatically.
 
 The portrait MP4 uses H.264 video and includes an AAC track, which this website intentionally mutes. Its metadata precedes the video data (fast-start), so playback need not wait for the full download. Media is served directly, without JavaScript-fetching entire files or duplicating the video. Preloading is a browser hint; low-data modes may defer loading.
+
+### Sharing thumbnail
+
+[assets/wedding-share.jpg](assets/wedding-share.jpg) is the 1200 x 630 sharing image: ivory invitation paper, the supplied emblem, gold botanical details, the couple's names, and 4 October 2026 on deep green. It is an opaque, progressive JPEG of about 91 KB.
+
+The HTML includes Open Graph image type/dimensions/alternative text and a large-image Twitter card. During deployment, `scripts/prepare_pages.py` writes absolute image, canonical, and page URLs directly into the HTML. Sharing apps do not need to execute JavaScript.
+
+The source HTML uses a relative image path only as a local-preview fallback. Reliable public sharing previews require the prepared output. No fake domain or GitHub username is hardcoded.
+
+For another static host, run this once with your real public URL, then upload the contents of the new output folder:
+
+```powershell
+python .\scripts\prepare_pages.py --site-url "https://your-real-domain.example/" --output .\_site
+```
+
+Use a new or empty output folder; the script deliberately refuses to overwrite existing output. If wedding names/date change, update the thumbnail and its descriptive metadata too. Different messaging apps crop/cache previews differently, and existing messages may keep older thumbnails.
 
 ## Playback and calendars
 
@@ -100,4 +118,4 @@ The portrait MP4 uses H.264 video and includes an AAC track, which this website 
 7. Watch to the end and verify all five schedule entries, with event descriptions on the left and times aligned on the right. Activate Add to Calendar with keyboard and touch and confirm it directly offers/downloads the invitation without a chooser.
 8. Open the `.ics` file in a device calendar; verify title, venue, message plus schedule, local-time conversion, and the omitted end time when unconfigured. Also check a configured end time.
 
-There is no existing package, build, lint, or test runner in this project.
+The deployment preparation script uses only Python's standard library. The website has no npm, linter, or frontend build-tool dependencies.

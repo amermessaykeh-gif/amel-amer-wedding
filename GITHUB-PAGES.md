@@ -1,28 +1,33 @@
-# Publish the final invitation on GitHub Pages
+# Publish the final invitation and its sharing thumbnail
 
-This is a static website. You do not need a backend, npm, a build command, or a custom GitHub Actions workflow.
+**Updated setup: choose GitHub Actions as the Pages source.** This replaces the earlier "Deploy from a branch" instructions. The included workflow automatically inserts your real website and thumbnail URLs into the published HTML.
+
+You do not need to know your GitHub username/domain in advance, edit URL placeholders, install packages, add secrets, or run a build manually. The website remains static, without a backend.
 
 ## 1. Check the event details
 
-Before sharing the invitation, confirm these values in [wedding-config.js](wedding-config.js):
+Before sharing, confirm [wedding-config.js](wedding-config.js):
 
 - **Title:** Amel & Amer Wedding
 - **Date:** 4 October 2026
 - **Guest arrival:** 17:00
 - **Venue:** Shater Hassan Palace, Ras Masqa, Tripoli
 - **Timezone:** Asia/Beirut, with the configured `+03:00` offset
-- **End time:** intentionally empty until confirmed. The calendar invitation works without inventing a finish time.
+- **End time:** intentionally empty until confirmed. Calendar export works without inventing a finish time.
 
-The five schedule entries are in [index.html](index.html). They are also included automatically in calendar exports.
+The ending schedule is in [index.html](index.html) and also feeds calendar exports. The sharing image includes the couple's names and date; if those change, update the image and its metadata as well.
 
-## 2. Extract the final ZIP
+## 2. Extract the updated final ZIP
 
-Extract `amel-amer-wedding-final.zip` into a new folder on your computer.
-
-The extracted folder contains:
+Extract `amel-amer-wedding-final.zip`. It contains:
 
 ```text
+.github/
+  workflows/
+    pages.yml
 .nojekyll
+scripts/
+  prepare_pages.py
 index.html
 styles.css
 invitation.js
@@ -34,107 +39,125 @@ AMEL_&_AMER_WEDDING_V.01.mp4
 assets/
   wedding-emblem.png
   wedding-song.mp3
+  wedding-share.jpg
 README.md
 GITHUB-PAGES.md
 ```
 
-The original large SVG/WAV, old favicon, prototype files, and local preview/testing tools are deliberately excluded. Keep the originals in your working folder for future editing.
+Upload the **extracted contents**, not the ZIP itself. Keep `index.html` at the repository root and preserve the `assets`, `scripts`, and `.github` folders. The large original SVG/WAV, old favicon, and local prototype/testing tools are deliberately excluded.
 
-**Upload the extracted contents, not the ZIP itself.** GitHub Pages does not unpack uploaded ZIP files. `index.html` must be at the repository root, not inside an extra outer folder.
-
-## 3. Create a GitHub repository
+## 3. Create or update your repository
 
 1. Sign in to [GitHub](https://github.com/).
-2. Select **New repository**.
-3. Suggested name: **`amel-amer-wedding`**.
-4. For the straightforward free setup, choose **Public**.
-5. Leave initialization options unchecked; the package already includes a README.
-6. Create the repository.
+2. Create a repository, for example **`amel-amer-wedding`**, or open the repository you already created.
+3. For a straightforward free setup, choose **Public**.
+4. If creating a new repository, leave initialization options unchecked; the package already has a README.
+5. Use **uploading an existing file** on an empty repository, or **Add file > Upload files** otherwise.
+6. Upload the extracted files/folders and commit to **`main`**. This is the branch the included workflow watches.
 
-**Privacy:** GitHub Pages is public hosting. The invitation, names, date, venue, images, and music will be accessible online. A private repository does not ordinarily make its Pages website private. If you need guest-only access, use a host with access controls instead.
+Confirm that `.github/workflows/pages.yml` and `scripts/prepare_pages.py` appear at their exact paths. If the file picker omitted dot-prefixed files/folders, upload those separately or use **Add file > Create new file** and paste their provided contents. The `.nojekyll` file may be empty.
 
-## 4. Upload the site
+All files in the release are below GitHub's 25 MiB per-file browser upload limit. Preserve filenames and capitalization, including the `&` in the video filename.
 
-1. On the empty repository page, follow **uploading an existing file**. If the repository already has files, use **Add file > Upload files**.
-2. Drag in all extracted files and the **`assets` folder**, preserving that folder.
-3. Commit the upload to **`main`**, with a message such as `Publish wedding invitation`.
-4. Confirm the root contains `index.html`, the MP4, and `.nojekyll`; confirm the PNG and MP3 are inside `assets`.
+**Privacy:** the published invitation and its media will be publicly accessible. A private repository does not ordinarily make the Pages website private. Choose a host with access controls if you need guest-only access.
 
-Do not rename files or change capitalization. The video filename contains `&`; its existing URL encoding in the HTML is intentional.
+## 4. Enable Pages using GitHub Actions
 
-If `.nojekyll` was omitted by your file picker, create it using **Add file > Create new file**. Name it exactly `.nojekyll`, add a blank line, and commit it. This marker tells Pages to serve the files directly without Jekyll processing.
+1. Open **Settings > Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Do not choose a branch/folder publishing source for this version.
+4. Open the repository's **Actions** tab.
+5. Select **Deploy wedding invitation**.
+6. Use **Run workflow**, choose `main`, and run it.
 
-Every file in this release is below GitHub's **25 MiB per-file browser upload limit**, so the web upload method is sufficient.
+If the initial upload triggered a failed run before Pages was enabled, simply rerun it after selecting GitHub Actions. No personal access token is needed.
 
-## 5. Enable Pages
+The workflow:
 
-Open the repository's **Settings > Pages**.
+1. Checks out the source.
+2. Gets the public base URL from GitHub Pages.
+3. Prepares only the required static files and injects absolute sharing URLs.
+4. Uploads and deploys that prepared site.
 
-Under **Build and deployment**, select:
+Later commits to `main` trigger deployment automatically.
 
-| Setting | Value |
-| --- | --- |
-| Source | **Deploy from a branch** |
-| Branch | **main** |
-| Folder | **/ (root)** |
+## 5. Open the published site
 
-Click **Save**.
+After the workflow succeeds, use its deployment link or **Visit site** in Settings > Pages.
 
-GitHub will run its Pages deployment. Check the repository's **Actions** tab if you need to see its progress or any errors. You do not need to add a workflow file yourself for this branch-based setup.
-
-## 6. Open the published invitation
-
-When deployment succeeds, use **Visit site** in Settings > Pages.
-
-With the suggested repository name, the address will be:
+For the suggested repository name, your URL will look like:
 
 ```text
 https://YOUR-USERNAME.github.io/amel-amer-wedding/
 ```
 
-Replace `YOUR-USERNAME` with your GitHub username. Share the **HTTPS website URL**, not the repository URL and not a `localhost`/`127.0.0.1` preview URL.
+The workflow also handles user-site roots and custom domains reported by Pages. The image URL will point to the same public site followed by `assets/wedding-share.jpg`.
 
-All runtime file references are relative, so the site supports this repository subpath without code changes.
+Share the **HTTPS website address**, not the repository URL or a local `127.0.0.1` preview link.
 
-## 7. Check it before sending to guests
+## 6. Check the thumbnail
 
-Test the published URL on a phone and a desktop:
+The supplied thumbnail is a 1200 x 630 JPEG with the invitation's green, ivory, and gold design.
 
-- The envelope appears and the same sheet unfolds.
-- The wedding song starts during the opening where audible autoplay is permitted. Otherwise, **Play music** enables it after a tap; this is a browser rule, not a hosting fault.
-- The video waits for **Play Invitation**, plays inline, and does not crop the portrait frame.
-- The music control works and the embedded video audio does not overlap it.
-- The ending shows all five schedule entries, with descriptions on the left and times on the right.
-- **Add to Calendar** provides the `.ics` invitation. Open it and confirm the date, local start time, venue, and schedule.
-- The end time remains unspecified unless you configured it.
-- Replay works, and short screens can scroll the letter.
+1. Open your published site's `assets/wedding-share.jpg` URL directly and confirm it loads.
+2. View the published page source and find `og:image`. It should contain the full public HTTPS image URL, not just `assets/wedding-share.jpg`.
+3. Confirm `twitter:image` and `og:url` also contain the correct public URLs.
+4. Paste the site link into a new WhatsApp/message draft and allow the app to fetch its preview.
 
-In WhatsApp's browser, guests may need to open the page in Safari or Chrome to handle the calendar file. A website cannot force a particular calendar app to launch.
+These tags are written into the HTML during deployment, not generated by browser JavaScript. That allows sharing crawlers to read them.
 
-## Updating the invitation later
+Messaging apps control the final preview size and crop. Some cache old previews, and existing messages may not update. Always test after a successful deployment; a local preview cannot prove that a public messaging service can fetch the site.
 
-Edit or upload changed files to the same `main` branch. Pages will publish the update.
+## 7. Check the invitation before sharing
 
-- Change event details in [wedding-config.js](wedding-config.js).
-- Change wording or the visible schedule in [index.html](index.html).
-- If changing CSS/JavaScript, bump the release query on the HTML references and any changed controller imports so returning visitors receive the new code.
-- If replacing media, use a new filename and update its references to avoid stale cached copies.
-- To stop publishing later, use the Pages settings to unpublish the site.
+- The same paper sheet comes out of the envelope and unfolds.
+- The song starts during the opening where audible autoplay is allowed; Play music works when a tap is required.
+- The video waits for Play Invitation, stays inline, and does not crop the portrait frame.
+- Video audio does not overlap the background song.
+- The ending contains all five schedule entries, with descriptions left and times right.
+- Add to Calendar provides the `.ics` event with the correct date, start, venue, and schedule.
+- The unconfirmed end time remains omitted.
+- Replay, music on/off, and scrolling on short screens work.
 
-For richer WhatsApp link previews, optionally add absolute `og:url` and `og:image` URLs to the HTML after your public address is known. Use a suitable public PNG/JPEG image. No public domain is hardcoded in this release.
+In WhatsApp's browser, a guest may need to open the site in Safari/Chrome to handle a calendar file. A website cannot force a particular calendar app to launch.
+
+## Updates
+
+Commit changed source files to `main`; the workflow prepares and deploys them.
+
+- Edit event details in [wedding-config.js](wedding-config.js).
+- Edit wording/schedule in [index.html](index.html).
+- Bump CSS/JavaScript release queries when changing those files.
+- If replacing the sharing image with a new filename to refresh cached previews, update both HTML image references and `SHARE_IMAGE`/`SITE_FILES` in [scripts/prepare_pages.py](scripts/prepare_pages.py).
+- If you change the Pages custom-domain setting, rerun the workflow so the static metadata uses the new URL.
+
+## Another static host or manual preparation
+
+With Python installed, prepare the same output yourself using the real public HTTPS URL:
+
+```powershell
+python .\scripts\prepare_pages.py --site-url "https://your-real-domain.example/" --output .\_site
+```
+
+Upload only the contents of the resulting `_site` folder to that host. The output folder must be new or empty. Source files are not overwritten.
 
 ## Troubleshooting
 
 | Symptom | Check |
 | --- | --- |
-| Site returns 404 | Pages points to `main` and `/ (root)`; the deployment succeeded; `index.html` is at the root |
-| Only a download link or ZIP appears | Upload the extracted files, not just the archive |
-| Video, logo, or music is missing | Exact filenames/capitalization and the `assets` folder were preserved |
-| Old styling appears | Bump CSS/JS release queries when uploading changed code, then reload |
-| Music waits for a tap | Use Play music; audible autoplay is controlled by the browser |
-| Calendar downloads instead of opening an app | Open the downloaded `.ics` with the device's calendar application |
+| Pages setup step fails | Settings > Pages uses GitHub Actions; rerun the workflow after enabling it |
+| No workflow is listed | `.github/workflows/pages.yml` was uploaded to `main` |
+| Site returns 404 | Deployment succeeded; use its website URL rather than the repository URL |
+| Video/logo/music is missing | Exact filenames, capitalization, and folder paths were preserved |
+| No sharing thumbnail | The image is publicly reachable and published `og:image` has an absolute HTTPS URL |
+| Image tag is still relative | You published the source with the old branch-only setup; switch to the included Actions workflow |
+| An older thumbnail appears | Check deployment and allow for the messaging app's cache; old messages may retain old previews |
+| Music waits for a tap | Audible autoplay is controlled by the browser; select Play music |
+| Calendar downloads instead of opening an app | Open the downloaded `.ics` with the installed calendar app |
 
 ## Official references
 
-- [Configure the GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
-- [Upload files to a repository and file-size limits](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository)
+- [GitHub Pages publishing sources](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+- [GitHub's static Pages workflow](https://github.com/actions/starter-workflows/blob/main/pages/static.yml)
+- [Pages URL metadata](https://github.com/actions/configure-pages/blob/v5/action.yml)
+- [Uploading files and size limits](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository)
