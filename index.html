@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#1c332d">
+    <meta name="description" content="A day for love. A lifetime together. You're invited to celebrate the wedding of Amel & Amer.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Amel & Amer | Our Wedding Invitation">
+    <meta property="og:description" content="With full hearts, we invite you to share in the beginning of our forever. Open your invitation.">
+    <meta name="color-scheme" content="dark">
+    <title>Amel & Amer | Our Wedding Invitation</title>
+    <link rel="icon" href="assets/wedding-emblem.png" type="image/png">
+    <link rel="stylesheet" href="styles.css?v=invitation-copy-20260910">
+    <script type="module" src="invitation.js?v=opening-music-20260910"></script>
+  </head>
+  <body>
+    <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <symbol id="sprig" viewBox="0 0 200 240">
+          <g fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M28 231C64 183 93 126 119 51M66 169C49 153 39 133 39 111M81 142C115 132 143 106 160 78M99 99C82 78 79 58 83 34"/>
+            <path d="M50 190C20 182 13 160 16 142C39 152 51 167 50 190ZM61 174C86 181 112 163 120 144C93 142 72 151 61 174ZM74 149C50 137 49 116 53 100C72 113 79 129 74 149ZM90 117C110 121 130 109 135 93C115 91 99 100 90 117ZM105 89C89 76 91 59 96 47C110 58 114 75 105 89Z"/>
+            <path d="M39 112C22 108 15 91 18 76C34 84 42 98 39 112ZM83 35C68 28 64 14 67 3C81 9 87 22 83 35ZM143 101C137 82 149 67 160 59C164 76 158 91 143 101ZM119 53C112 35 121 18 134 8C138 27 133 43 119 53"/>
+            <path d="M56 188L29 160M77 164L106 151M67 133L59 113M105 108L124 99M122 40L129 20"/>
+          </g>
+        </symbol>
+        <symbol id="play-icon" viewBox="0 0 24 24">
+          <path d="m9 5 11 7-11 7V5Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        </symbol>
+        <symbol id="calendar-icon" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <rect x="4" y="5.5" width="16" height="15" rx="2"/>
+            <path d="M8 3v5M16 3v5M4 11h16m-11 4h2m2 0h2m-6 3h2"/>
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <main class="invitation" id="invitation" data-state="loading" aria-label="Amel and Amer's wedding invitation">
+      <div class="video-stage" id="video-stage" aria-busy="true">
+        <video id="invitation-video" class="invitation-video" playsinline preload="auto" controls muted disablepictureinpicture disableremoteplayback aria-label="Amel and Amer's wedding invitation video">
+          <source src="AMEL_%26_AMER_WEDDING_V.01.mp4" type="video/mp4">
+          <a href="AMEL_%26_AMER_WEDDING_V.01.mp4">Open the wedding invitation video</a>.
+        </video>
+        <audio id="wedding-music" src="assets/wedding-song.mp3" preload="none" loop aria-label="Wedding background music"></audio>
+
+        <section class="panel loading-panel" id="loading-panel" aria-label="Loading invitation">
+          <div class="loading-content">
+            <img class="loading-emblem" src="assets/wedding-emblem.png" alt="" width="80" height="106">
+            <span class="loading-line" aria-hidden="true"></span>
+            <p class="eyebrow" id="loading-title">A little moment of love</p>
+            <p class="quiet-copy" id="loading-message">Preparing your invitation...</p>
+            <button class="text-button" id="loading-retry" type="button" hidden>Try loading again</button>
+            <button class="text-button" id="continue-without-music" type="button" hidden>Watch without music</button>
+          </div>
+        </section>
+
+        <section class="letter-panel" id="letter-panel" aria-label="Your wedding invitation" hidden>
+          <div class="letter-canvas" id="letter-canvas" data-scene="opening" data-reveal="settled">
+            <div class="letter-art" aria-hidden="true">
+              <svg class="foliage foliage-left"><use href="#sprig"/></svg>
+              <svg class="foliage foliage-right"><use href="#sprig"/></svg>
+            </div>
+            <div class="envelope-layers" aria-hidden="true">
+              <div class="envelope-shell envelope-back-shell"><div class="envelope-back"></div></div>
+              <div class="envelope-shell envelope-front-shell">
+                <div class="envelope-wall envelope-left"></div>
+                <div class="envelope-wall envelope-right"></div>
+                <div class="envelope-wall envelope-bottom"></div>
+              </div>
+              <div class="envelope-shell envelope-lid-shell"><div class="envelope-lid"></div></div>
+              <div class="envelope-shell envelope-seal-shell">
+                <div class="envelope-seal"><img src="assets/wedding-emblem.png" alt="" width="38" height="50"></div>
+              </div>
+              <p class="envelope-caption">A LETTER FROM OUR HEARTS</p>
+            </div>
+
+            <div class="letter-sheet">
+              <div class="sheet-upper">
+                <div class="sheet-face sheet-upper-face">
+                  <div class="paper-copy" data-copy="opening">
+                    <img class="paper-emblem" src="assets/wedding-emblem.png" alt="" width="45" height="60">
+                    <h1 class="couple-names" id="invitation-heading">Amel <span>&</span> Amer</h1>
+                    <p class="opening-date" id="opening-date"></p>
+                  </div>
+                  <div class="paper-copy" data-copy="ending" hidden>
+                    <img class="paper-emblem" src="assets/wedding-emblem.png" alt="" width="45" height="60">
+                    <p class="eyebrow">Our forever, with you</p>
+                    <h2 id="end-heading" tabindex="-1">We can't wait<br><em>to celebrate with you.</em></h2>
+                    <div class="event-details">
+                      <p class="event-date" id="event-date"></p>
+                      <p class="event-location" id="event-location"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="sheet-lower">
+                <div class="sheet-face sheet-front">
+                  <div class="paper-copy opening-actions" data-copy="opening">
+                    <p class="letter-poem">A letter from our hearts<br>to yours.</p>
+                    <div class="paper-actions">
+                      <button class="button" id="play-button" type="button">
+                        <svg class="icon" aria-hidden="true"><use href="#play-icon"/></svg>
+                        <span id="play-label">Play Invitation</span>
+                      </button>
+                      <p class="sound-note">With Love</p>
+                      <p class="signature">Amel & Amer</p>
+                    </div>
+                  </div>
+                  <div class="paper-copy ending-actions" data-copy="ending" hidden>
+                    <h3 class="schedule-heading">The celebration</h3>
+                    <ol class="wedding-schedule" id="wedding-schedule" aria-label="Wedding schedule, local venue time">
+                      <li><span>Guest arrival</span><time datetime="17:00">17:00</time></li>
+                      <li><span>Grand entrance <br>bride &amp; groom</span><time datetime="17:40">17:40</time></li>
+                      <li><span>Dinner</span><time datetime="19:00">19:00</time></li>
+                      <li><span>First Dance</span><time datetime="19:50">19:50</time></li>
+                      <li><span>Cake</span><time datetime="20:50">20:50</time></li>
+                    </ol>
+                    <div class="paper-actions">
+                      <a class="button" id="calendar-button" download="amel-and-amer-wedding.ics" type="text/calendar">
+                        <svg class="icon" aria-hidden="true"><use href="#calendar-icon"/></svg>
+                        Add to Calendar
+                      </a>
+                      <button class="text-button replay-button" id="replay-button" type="button">Replay Invitation</button>
+                    </div>
+                  </div>
+                  <div class="fold-light" aria-hidden="true"></div>
+                </div>
+                <div class="sheet-face sheet-back" aria-hidden="true">
+                  <img class="folded-emblem" src="assets/wedding-emblem.png" alt="" width="100" height="132">
+                  <span class="folded-note">WITH LOVE, ALWAYS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <button class="early-action" id="early-action" type="button" hidden>Open invitation</button>
+        <button class="music-toggle" id="music-toggle" type="button" aria-label="Play background music" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12M9 7l10-2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="6" cy="18" rx="3" ry="2" fill="none" stroke="currentColor" stroke-width="1.5"/><ellipse cx="16" cy="16" rx="3" ry="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span id="music-label">Play music</span>
+        </button>
+        <button class="playback-pause" id="pause-button" type="button" aria-label="Pause invitation" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+
+        <section class="panel error-panel" id="error-panel" aria-labelledby="error-heading" hidden>
+          <div class="error-content">
+            <img class="loading-emblem" src="assets/wedding-emblem.png" alt="" width="80" height="106">
+            <h2 id="error-heading">A little interruption.</h2>
+            <p class="quiet-copy" id="error-message">Your invitation couldn't load. Please check your connection and try again.</p>
+            <button class="button" id="retry-button" type="button">Try Again</button>
+            <a class="text-button" href="AMEL_%26_AMER_WEDDING_V.01.mp4">Open video instead</a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="notices">
+      <div class="notice" id="calendar-notice" role="status" hidden>
+        <p id="calendar-message"></p>
+        <button type="button" data-dismiss="calendar-notice" aria-label="Dismiss calendar message">&times;</button>
+      </div>
+      <div class="notice" id="music-notice" role="status" hidden>
+        <p id="music-message"></p>
+        <button type="button" data-dismiss="music-notice" aria-label="Dismiss music message">&times;</button>
+      </div>
+    </div>
+    <p class="sr-only" id="playback-status" role="status" aria-live="polite"></p>
+    <noscript>
+      <style>.loading-panel,.music-toggle{display:none}#wedding-music{display:block;position:fixed;bottom:15px;left:5%;width:90%}</style>
+      <p class="noscript-message">Use the video controls to watch. Enable JavaScript for the animated letter, background music, schedule, and calendar.</p>
+    </noscript>
+  </body>
+</html>
